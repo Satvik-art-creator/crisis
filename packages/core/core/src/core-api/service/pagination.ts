@@ -46,9 +46,7 @@ const getPaginationMode = (pagination?: PaginationParams): PaginationMode => {
     return 'offset';
   }
 
-  const keys = Object.keys(pagination ?? {});
-
-  return keys.includes('page') || keys.includes('pageSize') ? 'page' : 'offset';
+  return 'page';
 };
 
 const isPagedPagination = (pagination?: PaginationParams): pagination is PagedPagination =>
