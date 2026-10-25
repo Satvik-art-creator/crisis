@@ -132,4 +132,31 @@ describe('findAvailable source-row status filter', () => {
       })
     );
   });
+
+  test('uses documentId when the configured main field is denied by field permissions', async () => {
+    const permissionCheckerCreate =
+      global.strapi.plugins['content-manager'].services['permission-checker'].create;
+
+    permissionCheckerCreate.mockImplementation(({ model }: { model: string }) => ({
+      can: {
+        read: jest.fn((_entity?: unknown, field?: string) =>
+          model === TAG_UID && field === 'name' ? false : true
+        ),
+      },
+      cannot: { read: jest.fn().mockReturnValue(false) },
+      sanitizedQuery: { read: jest.fn().mockResolvedValue({}) },
+    }));
+
+    await relations.findAvailable(createCtx({}));
+
+    expect(strapi.db.query).toHaveBeenCalledWith(TAG_UID);
+    const queryParamsTransform = (strapi.get as jest.Mock).mock.results.at(-1).value.transform;
+    expect(queryParamsTransform).toHaveBeenCalledWith(
+      TAG_UID,
+      expect.objectContaining({
+        sort: 'documentId',
+        fields: ['documentId', 'publishedAt', 'updatedAt'],
+      })
+    );
+  });
 });

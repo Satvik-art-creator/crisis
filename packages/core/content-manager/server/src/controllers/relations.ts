@@ -41,7 +41,7 @@ const sanitizeMainField = (model: any, mainField: any, userAbility: any) => {
   // anything else (an id, a virtual field) the model wide read permission decides.
   const isModelAttribute = Boolean(model.attributes?.[mainField]);
   const canReadMainField = isModelAttribute
-    ? permissionChecker.can.read(null, mainField) || permissionChecker.can.read()
+    ? permissionChecker.can.read(null, mainField)
     : permissionChecker.can.read();
 
   if (!isMainFieldListable || !canReadMainField) {
