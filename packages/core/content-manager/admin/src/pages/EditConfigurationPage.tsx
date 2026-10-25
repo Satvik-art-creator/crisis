@@ -89,7 +89,7 @@ const EditConfigurationPage = () => {
             return;
           }
 
-          Object.assign({ ...field.edit }, editedMetadata);
+          Object.assign(field.edit, editedMetadata);
         });
 
       const res = await updateConfiguration({
