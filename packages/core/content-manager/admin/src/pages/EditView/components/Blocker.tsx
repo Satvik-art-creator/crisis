@@ -17,6 +17,10 @@ const Blocker = () => {
    */
   const hadPendingEdits = React.useRef(modified);
 
+  React.useEffect(() => {
+    hadPendingEdits.current = modified;
+  }, [modified]);
+
   // We reset the form to the published version to avoid errors like – https://strapi-inc.atlassian.net/browse/CONTENT-2284
   const handleProceed = () => {
     hadPendingEdits.current = false;
