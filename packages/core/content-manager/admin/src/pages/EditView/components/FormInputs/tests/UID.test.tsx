@@ -149,12 +149,22 @@ describe('UIDInput', () => {
     await waitFor(() => expect(screen.queryByTestId('loading-wrapper')).not.toBeInTheDocument());
     expect(await screen.findByText(/^Available$/)).toBeInTheDocument();
 
+    act(() => {
+      jest.advanceTimersByTime(4000);
+    });
+    expect(screen.queryByText(/^Available$/)).not.toBeInTheDocument();
+
     // Change the value to make it unavailable
     await user.type(input, 'taken');
     act(() => {
       jest.advanceTimersByTime(4000);
     });
     expect(await screen.findByText(/^Unavailable$/)).toBeInTheDocument();
+
+    act(() => {
+      jest.advanceTimersByTime(4000);
+    });
+    expect(screen.getByText(/^Unavailable$/)).toBeInTheDocument();
 
     jest.runOnlyPendingTimers();
     jest.useRealTimers();
