@@ -37,17 +37,11 @@ export default (auth: unknown): Visitor =>
   };
 
 /**
- * Content type a relation points to. Bidirectional relations only carry the target on
- * the side that owns the join, so the schema holding the attribute is used otherwise.
+ * The target UID is present on both sides of a bidirectional relation. The relation
+ * direction only affects how the join is stored, not which content type must be readable.
  */
 const getRelationTarget = (schema: Model, attribute: Attribute) => {
-  const { target, inversedBy, mappedBy } = attribute;
-
-  if (inversedBy != null || mappedBy != null) {
-    return schema.uid;
-  }
-
-  return target ?? schema.uid;
+  return attribute.target ?? schema.uid;
 };
 
 const visitRelationAttribute = async (
